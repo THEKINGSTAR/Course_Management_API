@@ -1,5 +1,5 @@
-// THIS CONFIGRATION FOR WORKING AS SERVERLESS  ON vercel
-
+// CONFIGURE TO RUN USING SERVER ON LOCAL MACHINE
+/*
 const mongoose = require('mongoose');
 const Course = require('../models/Course');
 
@@ -44,3 +44,28 @@ export default async function handler(req, res) {
       return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
+*/
+
+
+// THIS CONFIGRATION FOR WORKING AS SERVERLESS  ON vercel
+
+
+const connectDB = require('../utils/db');
+const Course = require('../models/Course');
+
+module.exports = async (req, res) => {
+  await connectDB();
+
+  if (req.method === 'GET') {
+    const courses = await Course.find();
+    return res.status(200).json(courses);
+  }
+
+  if (req.method === 'POST') {
+    const course = new Course(req.body);
+    const saved = await course.save();
+    return res.status(201).json(saved);
+  }
+
+  res.status(405).json({ error: 'Method not allowed' });
+};
