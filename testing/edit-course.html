@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Course</title>
+</head>
+<body>
+  <h1>Edit Course</h1>
+  <form id="editForm">
+    <label>Course ID:<br><input type="text" name="id" required></label><br><br>
+    <label>Title:<br><input type="text" name="title"></label><br><br>
+    <label>Description:<br><input type="text" name="description"></label><br><br>
+    <label>Image URL:<br><input type="text" name="image"></label><br><br>
+    <label>Start Date:<br><input type="date" name="startDate"></label><br><br>
+    <label>End Date:<br><input type="date" name="endDate"></label><br><br>
+    <label>Price:<br><input type="number" step="0.01" name="price"></label><br><br>
+    <button type="submit">Update Course</button>
+  </form>
+
+  <pre id="editResponse"></pre>
+
+  <script>
+    const form = document.getElementById('editForm');
+    const responseBox = document.getElementById('editResponse');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const id = formData.get('id');
+      formData.delete('id');
+
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch(`https://course-management-bxvbsj2xv-khaleds-projects-ea5343b9.vercel.app/api/courses/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      responseBox.textContent = JSON.stringify(result, null, 2);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List Courses</title>
+</head>
+<body>
+  <h1>All Courses</h1>
+  <button onclick="loadCourses()">Refresh List</button>
+  <pre id="courses"></pre>
+
+  <script>
+    async function loadCourses() {
+      const res = await fetch('https://course-management-bxvbsj2xv-khaleds-projects-ea5343b9.vercel.app/api/courses');
+      const data = await res.json();
+      document.getElementById('courses').textContent = JSON.stringify(data, null, 2);
+    }
+
+    loadCourses();
+  </script>
+</body>
+</html>
