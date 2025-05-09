@@ -1,28 +1,26 @@
-const connectDB = require('../../utils/db');
-const Course = require('../../models/Course');
+// api/courses/index.js
+import dbConnect from '../../utils/db';
+import Course from '../../models/Course';
 
-module.exports = (req, res) => {
-  res.status(200).json({ message: 'Course Management API is running.' });
-};
-
-module.exports = async (req, res) => {
-  await connectDB();
+export default async function handler(req, res) {
+  await dbConnect();
 
   if (req.method === 'GET') {
-    const courses = await Course.find();
-    return res.status(200).json(courses);
-  }
-
-  if (req.method === 'POST') {
     try {
-      const course = new Course(req.body);
-      const saved = await course.save();
-      return res.status(201).json(saved);
+      const courses = await Course.find({});
+      res.status(200).json(courses);
     } catch (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
+  } else if (req.method === 'POST') {
+    try {
+      const course = await Course.create(req.body);
+      res.status(201).json(course);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  } else {
+    res.setHeader('Allow', ['GET', 'POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-
-  return res.status(405).json({ error: 'Method not allowed' });
-};
-
+}

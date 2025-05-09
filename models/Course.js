@@ -1,16 +1,13 @@
-models/Course.js
-
-// FOR WORKING ON VERCEL SERVERLESS
-
-const mongoose = require('mongoose');
+// models/Course.js
+import mongoose from 'mongoose';
 
 const CourseSchema = new mongoose.Schema({
-  title: String,
+  title: { type: String, required: true },
   description: String,
   image: String,
   startDate: Date,
   endDate: Date,
-  price: Number
+  price: Number,
 }, { timestamps: true });
 
-module.exports = mongoose.models.Course || mongoose.model('Course', CourseSchema);
+export default mongoose.models.Course || mongoose.model('Course', CourseSchema);
