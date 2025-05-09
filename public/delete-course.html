@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delete Course</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: crimson;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <h1>Delete Course</h1>
+  <input type="text" id="courseId" placeholder="Enter Course ID" />
+  <button onclick="deleteCourse()">Delete</button>
+  <p id="result"></p>
+
+  <script>
+    async function deleteCourse() {
+      const id = document.getElementById('courseId').value;
+      try {
+        const res = await fetch(`/api/courses/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        document.getElementById('result').textContent =
+          res.ok ? 'Course deleted successfully!' : 'Failed: ' + data.error;
+      } catch (err) {
+        document.getElementById('result').textContent = 'Error: ' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
